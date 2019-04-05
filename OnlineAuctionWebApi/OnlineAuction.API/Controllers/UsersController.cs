@@ -1,0 +1,113 @@
+﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using OnlineAuction.API.Models;
+using OnlineAuction.BLL.DTO;
+using OnlineAuction.BLL.Interfaces;
+
+namespace OnlineAuction.API.Controllers
+{
+    [Authorize]
+    [RoutePrefix("api/users")]
+    public class UsersController : ApiController
+    {
+        private readonly IUsersService _usersService;
+
+        public UsersController(IUsersService usersService)
+        {
+            _usersService = usersService;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IHttpActionResult> GetAllUsersAsync([FromUri] PagingModel model)
+        {
+            if (model == null || !ModelState.IsValid)
+                model = new PagingModel() { Limit = 10, Offset = 0 };
+            var (users, totalCount) = await _usersService.GetAllUsersAsync(model.Limit, model.Offset);
+            if (!users.Any())
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            return Ok(new { users, totalCount });
+        }
+
+        [HttpGet]
+        [Route("{profileId:int:min(1)}")]
+        public async Task<IHttpActionResult> GetUserAsync(int profileId)
+        {
+            var user = await _usersService.GetUserByProfileAsync(profileId);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("current")]
+        public async Task<IHttpActionResult> GetCurrentUserAsync()
+        {
+            var user = await _usersService.GetUserByNameAsync(User.Identity.Name);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> RegisterUserAsync(RegisterModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = new UserDTO()
+            {
+                Name = model.Name,
+                Email = model.Email,
+                Role = "User",
+                Address = model.Address
+            };
+            var createdUser = await _usersService.CreateUserAsync(user, model.Password);
+            return Created(Request.RequestUri + "/" + createdUser?.UserProfileId, createdUser);
+        }
+
+        [HttpPut]
+        [Route("{profileId:int:min(1)}")]
+        public async Task<IHttpActionResult> EditUserAsync(int profileId, UserDTO user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var editedUser = await _usersService.GetUserByProfileAsync(profileId);
+            // Not admin user can edit only his own profile.
+            if (!User.IsInRole("Admin"))
+            {
+                if (editedUser.Name != User.Identity.Name)
+                    return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
+                // Only admin can change user's role.
+                user.Role = editedUser.Role;
+            }
+            user.UserProfileId = profileId;
+            await _usersService.UpdateUserAsync(user);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("{profileId:int:min(1)}/password")]
+        public async Task<IHttpActionResult> EditUserPasswordAsync(int profileId, UpdateUserPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            await _usersService.UpdateUserPasswordAsync(profileId, model.OldPassword, model.NewPassword);
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        [Route("{profileId:int:min(1)}")]
+        public async Task<IHttpActionResult> DeleteUserAsync(int profileId)
+        {
+            await _usersService.DeleteUserAsync(profileId);
+            return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+        }
+    }
+}

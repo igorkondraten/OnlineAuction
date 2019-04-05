@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.DAL", "OnlineAuction.DAL\OnlineAuction.DAL.csproj", "{444734EF-0DE4-4F5E-82EE-9B6B67466DFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.BLL", "OnlineAuction.BLL\OnlineAuction.BLL.csproj", "{AB28EF41-B7C4-4FD4-9F97-1EC7DB0DE1C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.API", "OnlineAuction.API\OnlineAuction.API.csproj", "{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.API.Tests", "OnlineAuction.API.Tests\OnlineAuction.API.Tests.csproj", "{B3A105B0-1787-46DC-9118-518CFC21B901}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{444734EF-0DE4-4F5E-82EE-9B6B67466DFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{444734EF-0DE4-4F5E-82EE-9B6B67466DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{444734EF-0DE4-4F5E-82EE-9B6B67466DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{444734EF-0DE4-4F5E-82EE-9B6B67466DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB28EF41-B7C4-4FD4-9F97-1EC7DB0DE1C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB28EF41-B7C4-4FD4-9F97-1EC7DB0DE1C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB28EF41-B7C4-4FD4-9F97-1EC7DB0DE1C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB28EF41-B7C4-4FD4-9F97-1EC7DB0DE1C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A105B0-1787-46DC-9118-518CFC21B901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A105B0-1787-46DC-9118-518CFC21B901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A105B0-1787-46DC-9118-518CFC21B901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A105B0-1787-46DC-9118-518CFC21B901}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6624406C-7BFF-45CB-99F2-92288835B6CC}
+	EndGlobalSection
+EndGlobal
