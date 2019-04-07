@@ -40,7 +40,7 @@ namespace OnlineAuction.API.Providers
                     return;
                 }
                 ClaimsIdentity oAuthIdentity = await usersService.AuthenticateUserAsync(context.UserName, context.Password);
-                AuthenticationProperties properties = CreateProperties(user.Name, user.Role);
+                AuthenticationProperties properties = CreateProperties(user);
                 AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
                 context.Validated(ticket);
             }
@@ -82,12 +82,14 @@ namespace OnlineAuction.API.Providers
             return Task.FromResult<object>(null);
         }
 
-        public static AuthenticationProperties CreateProperties(string userName, string role)
+        public static AuthenticationProperties CreateProperties(UserDTO user)
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
-                { "userName", userName },
-                { "role",  role }
+                { "userName", user.Name },
+                { "role",  user.Role },
+                { "id", user.UserProfileId.ToString() },
+                { "email", user.Email }
             };
             return new AuthenticationProperties(data);
         }
