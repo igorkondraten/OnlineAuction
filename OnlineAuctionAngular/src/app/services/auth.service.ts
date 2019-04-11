@@ -55,10 +55,26 @@ export class AuthService {
     )
   }
 
-  public isSignedIn(): Observable<boolean> {
+  public isSignedIn(): Observable<boolean> {    
     return this.currentUser$.pipe(
       map(currentUser => !!currentUser)
     );
+  }
+
+  public isAdmin(): Observable<boolean>{
+    return this.currentUser$.pipe(
+      map(currentUser => !!currentUser && currentUser.role == "Admin")
+    );
+  }
+
+  public isSeller(): Observable<boolean>{
+    return this.currentUser$.pipe(
+      map(currentUser => !!currentUser && currentUser.role == "Seller")
+    );
+  }
+
+  public getCurrentUser(): Observable<User> {
+    return this.currentUser$.asObservable();
   }
 
   private clearToken(): void {
@@ -69,18 +85,7 @@ export class AuthService {
   private handleToken(token: Token): void {
     this.window.localStorage.setItem('Token', token["access_token"]);
     this.token = token;
-    let user = <User> {name: token.userName, role: token.role, email: token.email, id: token.id};
-    console.log(user)
+    let user = <User> {name: token.userName, role: token.role, email: token.email, userProfileId: token.id};
     this.currentUser$.next(user);
-  }
-
-  public getAccessToken(): string {
-    if (this.token)
-      return this.token.access_token;
-    
-    const token = this.window.localStorage.getItem('Token');
-    if (!token)
-      return {} as any;
-    return token;
   }
 }

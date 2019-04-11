@@ -1,0 +1,63 @@
+<app-alert></app-alert>
+<div class="col-sm-6 offset-sm-3">
+  <h2 class="text-center">Edit lot</h2>
+  <form [formGroup]="editLotForm" (ngSubmit)="onSubmit()">
+    <div class="card-body">
+      <div class="form-group">
+        <label for="name">Lot name</label>
+        <input type="text" formControlName="name" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+          <div *ngIf="f.name.errors.required">Lot name is required</div>
+          <div *ngIf="f.name.errors.maxlength">Lot name must be less than 50 characters</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="initialPrice">Initial price</label>
+        <input type="number" formControlName="initialPrice" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.initialPrice.errors }" [disabled]="lot.status != 'New'" />
+        <div *ngIf="submitted && f.initialPrice.errors" class="invalid-feedback">
+          <div *ngIf="f.initialPrice.errors.required">Initial price is required</div>
+          <div *ngIf="f.initialPrice.errors.min">Initial price must be more than 0.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="date">Auction date</label>
+        <input formControlName="date" [selectMode]="'range'" [owlDateTimeTrigger]="date" [owlDateTime]="date"
+          class="form-control" [ngClass]="{ 'is-invalid': submitted && f.date.errors }">
+        <owl-date-time #date></owl-date-time>
+        <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
+          <div *ngIf="f.date.errors.required">Date is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" formControlName="description" rows="10"
+          [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+        <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+          <div *ngIf="f.description.errors.required">Description is required</div>
+          <div *ngIf="f.description.errors.maxlength">Description name must be less than 1000 characters</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select class="form-control" formControlName="category" 
+          [ngClass]="{ 'is-invalid': submitted && f.description.errors }">
+          <option *ngFor="let category of categories" [value]="category.categoryId" id="category.categoryId">{{category.name}}</option>
+        </select>
+        <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
+          <div *ngIf="f.category.errors.required">Category is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="image">New photo</label>
+        <input type="file" class="form-control-file" accept="image/*" id="image" (change)="imageUpload($event)">
+      </div>
+    </div>
+    <div class=" form-group text-center">
+      <button [disabled]="loading" class="btn btn-primary">Save</button>
+      <img *ngIf="loading" class="pl-3"
+        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+    </div>
+  </form>
+</div>

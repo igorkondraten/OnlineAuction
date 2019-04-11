@@ -82,5 +82,15 @@ namespace OnlineAuction.DAL.Repositories
             return (await query.OrderBy(x => x.Price).Skip(offset).Take(limit).ToListAsync(),
                 await query.CountAsync());
         }
+
+        public async Task<IEnumerable<Bid>> GetAllByLotAsync(int lotId)
+        {
+            return await _context.Set<Bid>().Where(x => x.LotId == lotId).OrderBy(x => x.Price).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Bid>> GetAllByUserAsync(int userId)
+        {
+            return await _context.Set<Bid>().Where(x => x.PlacedUserId == userId).OrderBy(x => x.Date).ToListAsync();
+        }
     }
 }

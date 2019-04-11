@@ -17,6 +17,7 @@ export class CurrentUserService {
         .get<User>('http://localhost:54741/api/users/current')
         .subscribe(currentUser => {
             this.currentUser = currentUser;
+            console.log(this.currentUser);
             resolve(true);
         }, error => {
             if (error.status !== 401) {

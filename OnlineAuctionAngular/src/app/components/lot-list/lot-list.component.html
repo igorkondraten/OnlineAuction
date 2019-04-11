@@ -1,0 +1,59 @@
+<app-alert></app-alert>
+<form>
+  <div class="input-group mb-3">
+    <input #searchBox name="searchBox" type="text" class="form-control" placeholder="Search lots..." />
+    <div class="input-group-append">
+      <button class="btn btn-outline-primary" (click)="search(searchBox.value)">Search</button>
+      <button class="btn btn-outline-primary" (click)="resetSearch(searchBox)">Reset</button>
+    </div>
+  </div>
+</form>
+<ul class="list-group">
+  <li *ngFor="let lot of lots" class="list-group-item">
+    <div *ngIf="lot.imageUrl; then lotImage else defaultImage"></div>
+    <ng-template #lotImage><img [src]="'http://localhost:54741' + lot.imageUrl" class="rounded float-left img-small">
+    </ng-template>
+    <ng-template #defaultImage><img src="http://localhost:54741/Images/noimage.png"
+        class="rounded float-left img-small"></ng-template>
+    <div class="lot-description float-right">
+      <h3><a href="">{{lot.name}}</a></h3>
+      <p><span class="lot-info-title">Category: </span>{{lot.category.name}}</p>
+      <p><span class="lot-info-title">Status: </span><span [ngClass]="{
+          'is-new': lot.status == 'New',
+          'is-active': lot.status == 'Active',
+          'is-finished': lot.status == 'Finished'
+        }">{{lot.status}}</span></p>
+      <p><span class="lot-info-title">Start date: </span>{{lot.beginDate | date:'MMM d, y, h:mm a' }}</p>
+      <p><span class="lot-info-title">End date: </span>{{lot.endDate | date:'MMM d, y, h:mm a' }}</p>
+      <p><span class="lot-info-title">Price: </span><span class="price text-warning">{{lot.currentPrice}}
+          $</span>
+        ({{lot.bids.length}} bids)</p>
+      <button type="button" class="btn btn-primary" [routerLink]="['lot', lot.lotId]">View details</button>
+      <button *ngIf="isUserAdmin$ | async" type="button" class="btn btn-info edit-btn-margin"
+        [routerLink]="['edit-lot', lot.lotId]">Edit</button>
+      <button *ngIf="isUserAdmin$ | async" type="button" class="btn btn-danger"
+        (click)="deleteLot(lot.lotId)">Delete</button>
+      <!-- <ng-content *ngIf="isUserSignedIn$ | async; then signedIn; else signedOut"></ng-content>
+      <ng-template #signedIn>
+
+      </ng-template>
+      <ng-template #signedOut>
+
+      </ng-template> -->
+    </div>
+
+  </li>
+</ul>
+<div class="d-flex justify-content-center">
+  <ngb-pagination class="mr-auto" [collectionSize]="totalCount" [pageSize]="limit" [(page)]="page"
+    (pageChange)="onPageChanged($event)" aria-label="Default pagination">
+  </ngb-pagination>
+  <div ngbDropdown>
+    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Lots on page</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button ngbDropdownItem (click)="changeLimit(10)">10</button>
+      <button ngbDropdownItem (click)="changeLimit(20)">20</button>
+      <button ngbDropdownItem (click)="changeLimit(50)">50</button>
+    </div>
+  </div>
+</div>

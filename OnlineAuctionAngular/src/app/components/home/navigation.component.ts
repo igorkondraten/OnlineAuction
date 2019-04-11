@@ -4,18 +4,22 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-navigation',
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.css']
 })
-export class HomeComponent implements OnInit {
+export class NavigationComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) { }
 
   public get isUserSignedIn$(): Observable<boolean> {
     return this.authService.isSignedIn();
   }
-  
+
+  public get isUserAdmin$(): Observable<boolean> {    
+    return this.authService.isAdmin();
+  }
+    
   public signOut(): void {
     this.authService.signOut().subscribe(() => {
       this.router.navigate([''])

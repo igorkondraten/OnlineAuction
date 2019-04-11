@@ -1,7 +1,7 @@
-import { UserAddress } from './user-address';
+import { UserAddress } from './user-address.model';
 
 export interface User {
-    id: number;
+    userProfileId: number;
     name: string;
     role: string;
     registerDate?: Date;

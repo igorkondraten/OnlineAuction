@@ -24,27 +24,23 @@ namespace OnlineAuction.API.Controllers
         [AllowAnonymous]
         [Route("lots/{lotId:int:min(1)}/bids")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetBidsByLotAsync(int lotId, [FromUri] PagingModel model)
+        public async Task<IHttpActionResult> GetBidsByLotAsync(int lotId)
         {
-            if (model == null || !ModelState.IsValid)
-                model = new PagingModel() { Limit = 10, Offset = 0 };
-            var (bids, totalCount) = await _bidsService.GetBidsByLotAsync(lotId, model.Limit, model.Offset);
+            var bids = await _bidsService.GetBidsByLotAsync(lotId);
             if (!bids.Any())
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
-            return Ok(new { bids, totalCount });
+            return Ok(bids);
         }
 
         [Authorize(Roles = "Admin")]
         [Route("users/{userId:int:min(1)}/bids")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetBidsAsync(int userId, [FromUri] PagingModel model)
+        public async Task<IHttpActionResult> GetBidsAsync(int userId)
         {
-            if (model == null || !ModelState.IsValid)
-                model = new PagingModel() { Limit = 10, Offset = 0 };
-            var (bids, totalCount) = await _bidsService.GetBidsByUserAsync(userId, model.Limit, model.Offset);
+            var bids = await _bidsService.GetBidsByUserAsync(userId);
             if (!bids.Any())
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
-            return Ok(new { bids, totalCount });
+            return Ok(bids);
         }
 
         [AllowAnonymous]

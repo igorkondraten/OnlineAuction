@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ModuleWithProviders, APP_INITIALIZER } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
@@ -9,27 +9,44 @@ import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common
 import { CurrentUserService } from './services/current-user.service';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { HomeComponent } from './components/home/home.component';
-import { MaterialExportsModule } from './components/material-exports/material-exports.module';
+import { NavigationComponent } from './components/home/navigation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { LotComponent } from './components/lot/lot.component';
+import { LotListComponent } from './components/lot-list/lot-list.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { AddLotComponent } from './components/add-lot/add-lot.component';
+import { EditLotComponent } from './components/edit-lot/edit-lot.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignUpComponent,
     SignInComponent,
-    HomeComponent
+    NavigationComponent,
+    LotComponent,
+    LotListComponent,
+    UserListComponent,
+    AlertComponent,
+    AddLotComponent,
+    EditLotComponent
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    MaterialExportsModule,
-    BrowserAnimationsModule
-  ],
+    NgbModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule
+    ],
   providers: [
     { provide: Window, useValue: window },
+    { provide: OWL_DATE_TIME_LOCALE, useValue: 'en'},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
@@ -37,12 +54,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
    },
    { 
      provide: APP_INITIALIZER, 
-     useFactory: (currentUserService: CurrentUserService) => () => currentUserService.loadCurrentUser(), 
+     useFactory: loadCurrentUser, 
      deps: [CurrentUserService], 
      multi: true 
    } ,
-   AuthService
+   AuthService,
+   NgbActiveModal
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+function loadCurrentUser(currentUserService: CurrentUserService): () => Promise<boolean> {
+  return () => currentUserService.loadCurrentUser();
+}

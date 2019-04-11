@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoginModel } from 'src/app/models/user-login-model';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -9,26 +11,37 @@ import { UserLoginModel } from 'src/app/models/user-login-model';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
+  loginForm: FormGroup;
+  loading = false;
+  submitted = false;
 
-  username: string;
-  password: string;
+  constructor(private router: Router,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private alertService: AlertService) { }
 
-  constructor(private router: Router, private authService: AuthService) { }
-
-  login(): void {
-    this.authService.signIn(<UserLoginModel>{userName: this.username, password: this.password})
-    .subscribe(() => {
-     this.router.navigate(['']);
-    }, (e) => {
-      console.log(e);
-      if (e.status == 400)
-        alert("Username or password is invalid.");
-      if (e.status == 500)
-        alert("Server error");
-    });
+  onSubmit() {
+    this.submitted = true;
+    if (this.loginForm.invalid) {
+      return;
+    }
+    this.loading = true;
+    this.authService.signIn(<UserLoginModel>{ userName: this.f.username.value, password: this.f.password.value })
+      .subscribe(() => {
+        this.router.navigate(['']);
+      }, (e) => {
+        this.alertService.error("Invalid login or password.");
+        this.loading = false;
+      });
   }
 
+  get f() { return this.loginForm.controls; }
+
   ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
 }

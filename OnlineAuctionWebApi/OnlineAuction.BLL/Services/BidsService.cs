@@ -54,16 +54,16 @@ namespace OnlineAuction.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<(IEnumerable<BidDTO> Bids, int TotalCount)> GetBidsByLotAsync(int lotId, int limit, int offset)
+        public async Task<IEnumerable<BidDTO>> GetBidsByLotAsync(int lotId)
         {
-            var (bids, totalCount) = await _unitOfWork.Bids.FindAsync(x => x.LotId == lotId, limit, offset);
-            return (bids.Select(x => Mapper.Map<Bid, BidDTO>(x)), totalCount);
+            var bids = await _unitOfWork.Bids.GetAllByLotAsync(lotId);
+            return (bids.Select(x => Mapper.Map<Bid, BidDTO>(x)));
         }
 
-        public async Task<(IEnumerable<BidDTO> Bids, int TotalCount)> GetBidsByUserAsync(int userId, int limit, int offset)
+        public async Task<IEnumerable<BidDTO>> GetBidsByUserAsync(int userId)
         {
-            var (bids, totalCount) = await _unitOfWork.Bids.FindAsync(x => x.PlacedUserId == userId, limit, offset);
-            return (bids.Select(x => Mapper.Map<Bid, BidDTO>(x)), totalCount);
+            var bids = await _unitOfWork.Bids.GetAllByUserAsync(userId);
+            return bids.Select(x => Mapper.Map<Bid, BidDTO>(x));
         }
 
         public async Task<BidDTO> GetBidAsync(int bidId)

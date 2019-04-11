@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light shadow" style="background-color: #e3f2fd;">
+  <a class="navbar-brand mb-0 h1" [routerLink]="['']">Online auction</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['']">Lots list</a>
+      </li>
+      <li *ngIf="isUserSignedIn$ | async" class="nav-item">
+        <a class="nav-link" href="#">My profile</a>
+      </li>      
+      <li *ngIf="isUserAdmin$ | async" class="nav-item">
+        <a class="nav-link" href="#">Users list</a>
+      </li>
+      <li *ngIf="(isUserAdmin$ | async) || (isUserSeller$ | async)" class="nav-item">
+          <a class="nav-link" [routerLink]="['create-lot']">Create lot</a>
+        </li>
+    </ul>    
+      <ng-content *ngIf="isUserSignedIn$ | async; then signedIn; else signedOut"></ng-content>
+      <ng-template #signedIn>
+        <button class="btn btn-outline-primary" (click)="signOut()">Sign out</button>
+      </ng-template>
+      <ng-template #signedOut>
+        <div ngbDropdown class="d-inline-block" autoClose="outside">
+          <button class="btn btn-outline-primary" id="dropdownForm1" ngbDropdownToggle>Login/Register</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+            <app-sign-in></app-sign-in>
+            <div class="dropdown-divider"></div>
+            <button ngbDropdownItem [routerLink]="['sign-up']">New user? Sign up now</button>
+          </div>
+        </div>
+      </ng-template>
+  </div>
+</nav>

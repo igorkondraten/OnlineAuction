@@ -51,7 +51,7 @@ namespace OnlineAuction.BLL.Services
             var oldLot = await _unitOfWork.Lots.GetAsync(lot.LotId);
             if (oldLot == null)
                 throw new ArgumentException("Lot not found.", nameof(lot));
-            if ((lot.EndDate - lot.BeginDate).Hours < 1)
+            if ((lot.EndDate - lot.BeginDate).TotalHours < 1)
                 throw new ValidationException("Auction duration can not be less than 1 hour.");
             var category = await _unitOfWork.Categories.GetAsync(lot.Category.CategoryId);
             if (category == null)

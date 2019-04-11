@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -93,6 +94,17 @@ namespace OnlineAuction.API.Controllers
             // Not admin user can edit only his own lot.
             if (!User.IsInRole("Admin") && oldLot.UserName != User.Identity.Name)
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            if (lot.Image != null)
+            {
+                try
+                {
+                    lot.ImageUrl = WriteImageToFile(lot.Image);
+                }
+                catch (ExternalException e)
+                {
+                    return InternalServerError(e);
+                }
+            }
             lot.LotId = id;
             await _lotsService.EditLotAsync(lot);
             return Ok();
@@ -109,7 +121,7 @@ namespace OnlineAuction.API.Controllers
 
         private static string WriteImageToFile(byte[] arr)
         {
-            var filename = $"images/{Guid.NewGuid()}.";
+            var filename = $"Images/{Guid.NewGuid()}.";
             using (var img = Image.FromStream(new MemoryStream(arr)))
             {
                 ImageFormat format;
@@ -132,7 +144,7 @@ namespace OnlineAuction.API.Controllers
                 {
                     throw new ArgumentException("Invalid image format.");
                 }
-                var path = HttpContext.Current.Server.MapPath("~/App_Data/" + filename);
+                var path = HttpContext.Current.Server.MapPath("~/" + filename);
                 img.Save(path, format);
             }
             return $"/{filename}";

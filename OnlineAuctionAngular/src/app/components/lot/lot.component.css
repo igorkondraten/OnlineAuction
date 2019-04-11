@@ -1,0 +1,15 @@
+.is-new {
+    color: blue;
+  }
+
+  .is-active {
+    color: green;
+  }
+
+  .is-finished {
+    color: gray;
+  }
+
+  .img-small {
+    max-width: 100%;
+  }

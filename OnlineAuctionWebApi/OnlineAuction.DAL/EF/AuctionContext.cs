@@ -30,9 +30,9 @@ namespace OnlineAuction.DAL.EF
             modelBuilder.Entity<Category>().Property(p => p.Name).HasMaxLength(50).IsRequired();
             modelBuilder.Entity<Lot>().Property(p => p.Name).HasMaxLength(50).IsRequired();
             modelBuilder.Entity<Lot>().Property(p => p.Description).HasMaxLength(1000).IsRequired();
-            modelBuilder.Entity<UserAddress>().Property(p => p.City).HasMaxLength(50).IsRequired();
-            modelBuilder.Entity<UserAddress>().Property(p => p.Country).HasMaxLength(100).IsRequired();
-            modelBuilder.Entity<UserAddress>().Property(p => p.Street).HasMaxLength(200).IsRequired();
+            modelBuilder.Entity<UserAddress>().Property(p => p.City).HasMaxLength(50);
+            modelBuilder.Entity<UserAddress>().Property(p => p.Country).HasMaxLength(100);
+            modelBuilder.Entity<UserAddress>().Property(p => p.Street).HasMaxLength(200);
             modelBuilder.Entity<UserAddress>().Property(p => p.ZipCode).HasMaxLength(18);
             modelBuilder.Entity<UserProfile>().Property(p => p.Name).HasMaxLength(100).IsRequired();
         }

@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using OnlineAuction.BLL.DTO;
 using OnlineAuction.BLL.Interfaces;
@@ -22,6 +25,8 @@ namespace OnlineAuction.API.Controllers
         public async Task<IHttpActionResult> GetCategoriesAsync()
         {
             var categories = await _categoriesService.GetAllCategoriesAsync();
+            if (!categories.Any())
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
             return Ok(categories);
         }
 
