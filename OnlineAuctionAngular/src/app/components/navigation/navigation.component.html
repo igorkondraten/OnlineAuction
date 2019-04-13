@@ -8,16 +8,16 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['']">Lots list</a>
+        <a class="nav-link" [routerLink]="['/']">Lots list</a>
       </li>
       <li *ngIf="isUserSignedIn$ | async" class="nav-item">
-        <a class="nav-link" href="#">My profile</a>
+        <a class="nav-link" [routerLink]="['/user', currentUser.userProfileId]">My profile</a>
       </li>      
       <li *ngIf="isUserAdmin$ | async" class="nav-item">
-        <a class="nav-link" href="#">Users list</a>
+        <a class="nav-link" [routerLink]="['/users']">Users list</a>
       </li>
       <li *ngIf="(isUserAdmin$ | async) || (isUserSeller$ | async)" class="nav-item">
-          <a class="nav-link" [routerLink]="['create-lot']">Create lot</a>
+          <a class="nav-link" [routerLink]="['/create-lot']">Create lot</a>
         </li>
     </ul>    
       <ng-content *ngIf="isUserSignedIn$ | async; then signedIn; else signedOut"></ng-content>
@@ -30,7 +30,7 @@
           <div ngbDropdownMenu aria-labelledby="dropdownForm1">
             <app-sign-in></app-sign-in>
             <div class="dropdown-divider"></div>
-            <button ngbDropdownItem [routerLink]="['sign-up']">New user? Sign up now</button>
+            <button ngbDropdownItem [routerLink]="['/sign-up']">New user? Sign up now</button>
           </div>
         </div>
       </ng-template>

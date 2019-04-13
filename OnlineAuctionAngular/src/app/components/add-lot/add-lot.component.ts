@@ -67,7 +67,6 @@ export class AddLotComponent implements OnInit {
     reader.onload = ((e) => {
       let reader = e.target;
       this.image = reader.result;
-      console.log(this.image)
     }).bind(this);
     reader.readAsDataURL(file);
   }

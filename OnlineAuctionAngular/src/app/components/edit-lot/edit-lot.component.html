@@ -15,7 +15,7 @@
       <div class="form-group">
         <label for="initialPrice">Initial price</label>
         <input type="number" formControlName="initialPrice" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f.initialPrice.errors }" [disabled]="lot.status != 'New'" />
+          [ngClass]="{ 'is-invalid': submitted && f.initialPrice.errors }" />
         <div *ngIf="submitted && f.initialPrice.errors" class="invalid-feedback">
           <div *ngIf="f.initialPrice.errors.required">Initial price is required</div>
           <div *ngIf="f.initialPrice.errors.min">Initial price must be more than 0.</div>

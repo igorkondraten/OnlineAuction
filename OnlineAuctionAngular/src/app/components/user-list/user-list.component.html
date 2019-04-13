@@ -1,3 +1,40 @@
-<p>
-  user-list works!
-</p>
+<app-alert></app-alert>
+<table class="table table-bordered text-center">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Role</th>
+      <th scope="col">Register date</th>
+      <th scope="col">Email</th>
+      <th scope="col">Manage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td scope="row">{{ user.userProfileId }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.role }}</td>
+      <td>{{ user.registrationDate | date:'MMM d, y' }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <button class="btn btn-primary btn-sm mr-1" [routerLink]="['/user', user.userProfileId]">Profile</button>
+        <button class="btn btn-warning btn-sm mr-1" [routerLink]="['/edit-user', user.userProfileId]">Edit</button>
+        <button class="btn btn-danger btn-sm" (click)="deleteUser(user.userProfileId)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="d-flex justify-content-center">
+  <ngb-pagination class="mr-auto" [collectionSize]="totalCount" [pageSize]="limit" [(page)]="page"
+    (pageChange)="onPageChanged($event)" aria-label="Default pagination">
+  </ngb-pagination>
+  <div ngbDropdown>
+    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Users on page</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button ngbDropdownItem (click)="changeLimit(10)">10</button>
+      <button ngbDropdownItem (click)="changeLimit(20)">20</button>
+      <button ngbDropdownItem (click)="changeLimit(50)">50</button>
+    </div>
+  </div>
+</div>

@@ -46,7 +46,7 @@ export class SignUpComponent {
         country: this.f.country.value,
         city: this.f.city.value,
         street: this.f.street.value,
-        zipcode: this.f.zipcode.value
+        zipCode: this.f.zipcode.value
       }
     })
       .subscribe(

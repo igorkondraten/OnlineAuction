@@ -1,0 +1,138 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title mb-4">
+            <div class="d-flex justify-content-start">
+              <div class="userData ml-3">
+                <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold">{{user?.name}}</h2>
+                <h6 class="d-block">{{user?.lots.length}} Lots</h6>
+                <h6 class="d-block">{{user?.bids.length}} Bids</h6>                
+              </div>              
+            </div>
+          </div>
+          <ngb-tabset>
+            <ngb-tab title="Information">
+              <ng-template ngbTabContent>
+                <div class="row mt-4">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">Email</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.email}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">Role</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.role}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">Register date</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.registrationDate | date:'MMM d, y'}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">Country</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.address.country}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">City</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.address.city}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">Street</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.address.street}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 col-md-2 col-5">
+                    <label style="font-weight:bold;">Zipcode</label>
+                  </div>
+                  <div class="col-md-8 col-6">
+                    {{user?.address.zipCode}}
+                  </div>
+                </div>
+                <hr />
+                <button *ngIf="user && ((isUserAdmin$ | async) || (isUserOwner$ | async))" [routerLink]="['/edit-user', user?.userProfileId]" class="btn btn-primary">Edit profile</button>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Lots">
+              <ng-template ngbTabContent>
+                <table class="table table-bordered text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">Lot ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Status</th>
+                      <th *ngIf="(isUserOwner$ | async) || (isUserAdmin$ | async)" scope="col">Manage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let lot of user.lots">
+                      <td><a [routerLink]="['/lot', lot.lotId]">{{ lot.lotId }}</a></td>
+                      <td>{{ lot.name }}</td>
+                      <td>{{ lot.beginDate | date:'MMM d, y, h:mm a' }}</td>
+                      <td>{{ lot.currentPrice | number }} $</td>
+                      <td>{{ lot.status }}</td>
+                      <td *ngIf="(isUserOwner$ | async) || (isUserAdmin$ | async)"><button class="btn btn-small btn-primary" [routerLink]="['/edit-lot', lot.lotId]">Edit</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Bids">
+              <ng-template ngbTabContent>
+                <table class="table table-bordered text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">Bid ID</th>
+                      <th scope="col">Lot ID</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let bid of user?.bids">
+                      <td>{{ bid.bidId }}</td>
+                      <td><a [routerLink]="['/lot', bid.lotId]">{{ bid.lotId }}</a></td>
+                      <td>{{ bid.date | date:'MMM d, y, h:mm a' }}</td>
+                      <td>{{ bid.price | number }} $</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

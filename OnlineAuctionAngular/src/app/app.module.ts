@@ -9,7 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common
 import { CurrentUserService } from './services/current-user.service';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { NavigationComponent } from './components/home/navigation.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { LotComponent } from './components/lot/lot.component';
@@ -19,6 +19,8 @@ import { AlertComponent } from './components/alert/alert.component';
 import { AddLotComponent } from './components/add-lot/add-lot.component';
 import { EditLotComponent } from './components/edit-lot/edit-lot.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
+import { UserComponent } from './components/user/user.component';
+import { EditUserComponent } from './components/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_
     UserListComponent,
     AlertComponent,
     AddLotComponent,
-    EditLotComponent
+    EditLotComponent,
+    UserComponent,
+    EditUserComponent
   ],
   imports: [
     HttpClientModule,

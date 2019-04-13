@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, tap, delay } from 'rxjs/operators';
-import { User } from '../models/user';
+import { User } from '../models/user.model';
 import { UserRegisterModel } from '../models/user-register-model';
 import { UserLoginModel } from '../models/user-login-model';
 import { Token } from '../models/token';

@@ -17,7 +17,6 @@ export class LotListComponent implements OnInit {
   page: number = 1;
   lots: Lot[];
   totalCount: number;
-  query: string;
   searchQuery: string;
 
   constructor(private lotService: LotService, 
