@@ -3,6 +3,9 @@ using OnlineAuction.DAL.Entities;
 
 namespace OnlineAuction.DAL.EF
 {
+    /// <summary>
+    /// Context initializer.
+    /// </summary>
     internal class AuctionContextInitializer : DropCreateDatabaseIfModelChanges<AuctionContext>
     {
         protected override void Seed(AuctionContext db)

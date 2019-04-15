@@ -6,13 +6,23 @@ using OnlineAuction.DAL.Interfaces;
 
 namespace OnlineAuction.DAL.EF
 {
+    /// <summary>
+    /// Database context of the application.
+    /// </summary>
     public class AuctionContext : IdentityDbContext<ApplicationUser>, IDataContext
     {
+        /// <summary>
+        /// Static constructor which sets database initializer.
+        /// </summary>
         static AuctionContext()
         {
             Database.SetInitializer<AuctionContext>(new AuctionContextInitializer());
         }
 
+        /// <summary>
+        /// Initializes a new instance of the ApplicationDbContext.
+        /// </summary>
+        /// <param name="connectionString">Connection string.</param>
         public AuctionContext(string connectionString)
             : base(connectionString)
         {
@@ -37,10 +47,29 @@ namespace OnlineAuction.DAL.EF
             modelBuilder.Entity<UserProfile>().Property(p => p.Name).HasMaxLength(100).IsRequired();
         }
 
+        /// <summary>
+        /// DbSet of bid entities.
+        /// </summary>
         public IDbSet<Bid> Bids { get; set; }
+
+        /// <summary>
+        /// DbSet of bid entities.
+        /// </summary>
         public IDbSet<Category> Categories { get; set; }
+
+        /// <summary>
+        /// DbSet of lot entities.
+        /// </summary>
         public IDbSet<Lot> Lots { get; set; }
+
+        /// <summary>
+        /// DbSet of user profile entities.
+        /// </summary>
         public IDbSet<UserProfile> UserProfiles { get; set; }
+
+        /// <summary>
+        /// DbSet of user address entities.
+        /// </summary>
         public IDbSet<UserAddress> UserAddresses { get; set; }
     }
 }

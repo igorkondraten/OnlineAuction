@@ -7,6 +7,9 @@ using OnlineAuction.DAL.Entities;
 
 namespace OnlineAuction.BLL.Infrastructure.AutoMapper
 {
+    /// <summary>
+    /// Automapper profile for lot entity.
+    /// </summary>
     public class LotMapperProfile : Profile
     {
         public LotMapperProfile()

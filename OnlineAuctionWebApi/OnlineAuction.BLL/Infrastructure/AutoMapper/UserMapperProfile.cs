@@ -5,6 +5,9 @@ using OnlineAuction.DAL.Entities;
 
 namespace OnlineAuction.BLL.Infrastructure.AutoMapper
 {
+    /// <summary>
+    /// Automapper profile for user entity.
+    /// </summary>
     public class UserMapperProfile : Profile
     {
         public UserMapperProfile()
@@ -14,6 +17,8 @@ namespace OnlineAuction.BLL.Infrastructure.AutoMapper
                 .ForMember(x => x.Role, o => o.MapFrom(s => s.ApplicationUser.Roles.Select(x => x.RoleId).FirstOrDefault()))
                 .MaxDepth(1);
             CreateMap<UserDTO, UserProfile>()
+                .ForMember(x => x.Bids, o => o.Ignore())
+                .ForMember(x => x.Lots, o => o.Ignore())
                 .MaxDepth(1);
             CreateMap<UserDTO, ApplicationUser>()
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.Name))

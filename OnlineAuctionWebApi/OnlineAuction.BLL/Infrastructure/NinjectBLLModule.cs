@@ -9,14 +9,28 @@ using OnlineAuction.DAL.Repositories;
 
 namespace OnlineAuction.BLL.Infrastructure
 {
+    /// <summary>
+    /// Business logic layer module for Ninject.
+    /// </summary>
     public class NinjectBLLModule : NinjectModule
     {
+        /// <summary>
+        /// DAL Ninject module.
+        /// </summary>
         private NinjectDALModule _DALModule;
 
+        /// <summary>
+        /// Creates Ninject module with connection string.
+        /// </summary>
+        /// <param name="connection">Connection string to DB.</param>
         public NinjectBLLModule(string connection)
         {
             _DALModule = new NinjectDALModule(connection);
         }
+
+        /// <summary>
+        /// Loads dependencies.
+        /// </summary>
         public override void Load()
         {
             Kernel?.Load(new INinjectModule[] { _DALModule });

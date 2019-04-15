@@ -10,6 +10,9 @@ using OnlineAuction.BLL.Interfaces;
 
 namespace OnlineAuction.API.Providers
 {
+    /// <summary>
+    /// Provider of OAuth user tokens.
+    /// </summary>
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
@@ -19,6 +22,9 @@ namespace OnlineAuction.API.Providers
             _publicClientId = publicClientId ?? throw new ArgumentNullException(nameof(publicClientId));
         }
 
+        /// <summary>
+        /// Method for generating token for user.
+        /// </summary>
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             using (var scope = System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver.BeginScope())
@@ -46,6 +52,9 @@ namespace OnlineAuction.API.Providers
             }
         }
 
+        /// <summary>
+        /// Called at the final stage of a successful Token endpoint request. 
+        /// </summary>
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
             foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
@@ -56,6 +65,9 @@ namespace OnlineAuction.API.Providers
             return Task.FromResult<object>(null);
         }
 
+        /// <summary>
+        /// Called to validate that the origin of the request is a registered "client_id", and that the correct credentials for that client are present on the request.
+        /// </summary>
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             // Resource owner password credentials does not provide a client ID.
@@ -67,6 +79,9 @@ namespace OnlineAuction.API.Providers
             return Task.FromResult<object>(null);
         }
 
+        /// <summary>
+        /// Called to validate that the context.ClientId is a registered "client_id", and that the context.RedirectUri a "redirect_uri" registered for that client.
+        /// </summary>
         public override Task ValidateClientRedirectUri(OAuthValidateClientRedirectUriContext context)
         {
             if (context.ClientId == _publicClientId)
@@ -82,6 +97,11 @@ namespace OnlineAuction.API.Providers
             return Task.FromResult<object>(null);
         }
 
+        /// <summary>
+        /// Adds additional information about user to response with token.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>Authentication properties.</returns>
         public static AuthenticationProperties CreateProperties(UserDTO user)
         {
             IDictionary<string, string> data = new Dictionary<string, string>

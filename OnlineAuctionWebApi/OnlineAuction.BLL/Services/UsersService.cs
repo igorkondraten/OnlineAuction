@@ -13,6 +13,9 @@ using OnlineAuction.DAL.Interfaces;
 
 namespace OnlineAuction.BLL.Services
 {
+    /// <summary>
+    /// Contains methods for managing users and their profiles.
+    /// </summary>
     public class UsersService : IUsersService, IDisposable
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -22,6 +25,14 @@ namespace OnlineAuction.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Async method for creating new user with password.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <param name="password">The password.</param>
+        /// <returns>The Task, containing user DTO.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if user is null.</exception>
+        /// <exception cref="ValidationException">Thrown if user validation failed.</exception>
         public async Task<UserDTO> CreateUserAsync(UserDTO user, string password)
         {
             if (user == null)
@@ -50,6 +61,12 @@ namespace OnlineAuction.BLL.Services
             return createdUser;
         }
 
+        /// <summary>
+        /// Async method for authenticating user.
+        /// </summary>
+        /// <param name="userName">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns>The Task, containing ClaimsIdentity.</returns>
         public async Task<ClaimsIdentity> AuthenticateUserAsync(string userName, string password)
         {
             ClaimsIdentity claim = null;
@@ -59,6 +76,12 @@ namespace OnlineAuction.BLL.Services
             return claim;
         }
 
+        /// <summary>
+        /// Async method for finding user by name.
+        /// </summary>
+        /// <param name="name">The user name.</param>
+        /// <returns>The Task, containing user DTO.</returns>
+        /// <exception cref="NotFoundException">Thrown if user not found in DB.</exception>
         public async Task<UserDTO> GetUserByNameAsync(string name)
         {
             var appUser = await _unitOfWork.UserManager.FindByNameAsync(name);
@@ -70,12 +93,12 @@ namespace OnlineAuction.BLL.Services
             return user;
         }
 
-        public async Task<UserDTO> GetUserByEmailAsync(string email)
-        {
-            var user = await _unitOfWork.UserManager.FindByEmailAsync(email);
-            return new UserDTO() { Name = user.UserName };
-        }
-
+        /// <summary>
+        /// Async method that gets all users with pagination.
+        /// </summary>
+        /// <param name="limit">Number of items.</param>
+        /// <param name="offset">Items to skip.</param>
+        /// <returns>The Task, containing collection of user DTOs and total users count.</returns>
         public async Task<(IEnumerable<UserDTO> Users, int TotalCount)> GetAllUsersAsync(int limit, int offset)
         {
             var (users, totalCount) = await _unitOfWork.UserProfiles.GetAllAsync(limit, offset);
@@ -92,6 +115,15 @@ namespace OnlineAuction.BLL.Services
             return (usersDto, totalCount);
         }
 
+        /// <summary>
+        /// Async method for updating user and his profile.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The Task.</returns>
+        /// <exception cref="NotFoundException">Thrown if user not found in DB.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if user is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if role doesn't exist.</exception>
+        /// <exception cref="ArgumentException">Thrown if user validation failed.</exception>
         public async Task UpdateUserAsync(UserDTO user)
         {
             if (user == null)
@@ -110,7 +142,7 @@ namespace OnlineAuction.BLL.Services
             var currentRole = (await _unitOfWork.UserManager.GetRolesAsync(appUser.Id)).FirstOrDefault();
             if (currentRole != user.Role)
             {
-                await _unitOfWork.UserManager.RemoveFromRoleAsync(appUser.Id, user.Role);
+                await _unitOfWork.UserManager.RemoveFromRoleAsync(appUser.Id, currentRole);
                 await _unitOfWork.UserManager.AddToRoleAsync(appUser.Id, user.Role);
             }
             user.RegistrationDate = oldUser.RegistrationDate;
@@ -118,6 +150,12 @@ namespace OnlineAuction.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
+        /// <summary>
+        /// Async method for finding user by profile ID.
+        /// </summary>
+        /// <param name="profileId">The profile ID.</param>
+        /// <returns>The Task, containing user DTO.</returns>
+        /// <exception cref="NotFoundException">Thrown if user not found in DB.</exception>
         public async Task<UserDTO> GetUserByProfileAsync(int profileId)
         {
             var user = await _unitOfWork.UserProfiles.GetAsync(profileId);
@@ -128,6 +166,15 @@ namespace OnlineAuction.BLL.Services
             return userDto;
         }
 
+        /// <summary>
+        /// Async method for updating user password.
+        /// </summary>
+        /// <param name="profileId">The profile ID.</param>
+        /// <param name="oldPassword">The old password.</param>
+        /// <param name="newPassword">The new password.</param>
+        /// <returns>The Task.</returns>
+        /// <exception cref="NotFoundException">Thrown if user not found in DB.</exception>
+        /// <exception cref="ValidationException">Thrown if user validation failed.</exception>
         public async Task UpdateUserPasswordAsync(int profileId, string oldPassword, string newPassword)
         {
             var user = await _unitOfWork.UserProfiles.GetAsync(profileId);
@@ -139,12 +186,23 @@ namespace OnlineAuction.BLL.Services
                 throw new ValidationException(string.Join(", ", result.Errors));
         }
 
+        /// <summary>
+        /// Async method for deleting user and his profile, including bids and lots. 
+        /// </summary>
+        /// <param name="profileId">The profile ID.</param>
+        /// <returns>The Task.</returns>
+        /// <exception cref="NotFoundException">Thrown if user not found in DB.</exception>
+        /// <exception cref="DataException">Thrown if there was an error in DB when deleting user.</exception>
         public async Task DeleteUserAsync(int profileId)
         {
             var userProfile = await _unitOfWork.UserProfiles.GetAsync(profileId);
             if (userProfile == null)
                 throw new NotFoundException("User not found.");
             var appUser = userProfile.ApplicationUser;
+            foreach (var lot in userProfile.Lots.ToList())
+            {
+                _unitOfWork.Lots.Delete(lot.LotId);
+            }
             _unitOfWork.UserProfiles.Delete(profileId);
             var result = await _unitOfWork.UserManager.DeleteAsync(appUser);
             if (result.Errors.Any())

@@ -2,6 +2,9 @@
 
 namespace OnlineAuction.BLL.Infrastructure.AutoMapper
 {
+    /// <summary>
+    /// Automapper configuration.
+    /// </summary>
     public static class AutoMapperServicesConfiguration
     {
         public static void Configure()

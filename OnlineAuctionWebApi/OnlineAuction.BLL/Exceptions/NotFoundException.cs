@@ -2,6 +2,9 @@
 
 namespace OnlineAuction.BLL.Exceptions
 {
+    /// <summary>
+    /// The exception is thrown when requested entity doesn't exist in database.
+    /// </summary>
     public class NotFoundException : Exception
     {
         public NotFoundException() : base() { }

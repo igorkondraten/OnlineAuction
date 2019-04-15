@@ -4,17 +4,20 @@ using OnlineAuction.DAL.Interfaces;
 
 namespace OnlineAuction.DAL.Identity
 {
+    /// <summary>
+    /// Manager for identity users.
+    /// </summary>
     public class ApplicationUserManager : UserManager<ApplicationUser>, IUserManager
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store) : base(store)
         {
-            this.UserValidator = new UserValidator<ApplicationUser>(this)
+            UserValidator = new UserValidator<ApplicationUser>(this)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
             // Configure validation logic for passwords
-            this.PasswordValidator = new PasswordValidator
+            PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6
             };

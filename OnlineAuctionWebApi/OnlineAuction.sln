@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.BLL", "Online
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.API", "OnlineAuction.API\OnlineAuction.API.csproj", "{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.API.Tests", "OnlineAuction.API.Tests\OnlineAuction.API.Tests.csproj", "{B3A105B0-1787-46DC-9118-518CFC21B901}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineAuction.BLL.Tests", "OnlineAuction.BLL.Tests\OnlineAuction.BLL.Tests.csproj", "{53A70FA1-8631-4F55-8F00-82F07EAFD8F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB580C6-0A1F-46C2-B64E-C1DB079D8EE3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3A105B0-1787-46DC-9118-518CFC21B901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3A105B0-1787-46DC-9118-518CFC21B901}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3A105B0-1787-46DC-9118-518CFC21B901}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3A105B0-1787-46DC-9118-518CFC21B901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A70FA1-8631-4F55-8F00-82F07EAFD8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A70FA1-8631-4F55-8F00-82F07EAFD8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A70FA1-8631-4F55-8F00-82F07EAFD8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A70FA1-8631-4F55-8F00-82F07EAFD8F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

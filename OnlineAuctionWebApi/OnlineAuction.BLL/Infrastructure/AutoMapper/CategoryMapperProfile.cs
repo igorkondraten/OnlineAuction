@@ -4,6 +4,9 @@ using OnlineAuction.DAL.Entities;
 
 namespace OnlineAuction.BLL.Infrastructure.AutoMapper
 {
+    /// <summary>
+    /// Automapper profile for category entity.
+    /// </summary>
     public class CategoryMapperProfile : Profile
     {
         public CategoryMapperProfile()

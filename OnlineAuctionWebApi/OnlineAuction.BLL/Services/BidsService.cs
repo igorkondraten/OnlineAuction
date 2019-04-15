@@ -12,6 +12,9 @@ using OnlineAuction.DAL.Interfaces;
 
 namespace OnlineAuction.BLL.Services
 {
+    /// <summary>
+    /// Contains methods for managing bids.
+    /// </summary>
     public class BidsService : IBidsService, IDisposable
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +24,13 @@ namespace OnlineAuction.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Async method for creating bid.
+        /// </summary>
+        /// <param name="bid">The bid DTO.</param>
+        /// <returns>The Task, containing created bid DTO.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if bid is null.</exception>
+        /// <exception cref="ValidationException">Thrown when validation is failed.</exception>
         public async Task<BidDTO> CreateBidAsync(BidDTO bid)
         {
             if (bid == null)
@@ -45,6 +55,12 @@ namespace OnlineAuction.BLL.Services
             return Mapper.Map<Bid, BidDTO>(await _unitOfWork.Bids.GetAsync(newBid.BidId));
         }
 
+        /// <summary>
+        /// Async method for deleting bid.
+        /// </summary>
+        /// <param name="bidId">The bid ID.</param>
+        /// <returns>The Task.</returns>
+        /// <exception cref="NotFoundException">Thrown when bid not found in DB.</exception>
         public async Task DeleteBidAsync(int bidId)
         {
             var savedBid = await _unitOfWork.Bids.GetAsync(bidId);
@@ -54,18 +70,39 @@ namespace OnlineAuction.BLL.Services
             await _unitOfWork.SaveAsync();
         }
 
+        /// <summary>
+        /// Async method for getting bids by lot ID.
+        /// </summary>
+        /// <param name="lotId">The lot ID.</param>
+        /// <returns>The Task, containing collection of bids DTOs.</returns>
+        /// <exception cref="NotFoundException">Thrown when lot not found in DB.</exception>
         public async Task<IEnumerable<BidDTO>> GetBidsByLotAsync(int lotId)
         {
+            if (await _unitOfWork.Lots.GetAsync(lotId) == null)
+                throw new NotFoundException("Lot not found");
             var bids = await _unitOfWork.Bids.GetAllByLotAsync(lotId);
             return (bids.Select(x => Mapper.Map<Bid, BidDTO>(x)));
         }
 
-        public async Task<IEnumerable<BidDTO>> GetBidsByUserAsync(int userId)
+        /// <summary>
+        /// Async method for getting bids by user profile ID.
+        /// </summary>
+        /// <param name="userProfileId">The user profile ID.</param>
+        /// <returns>The Task, containing collection of bids DTOs.</returns>
+        /// <exception cref="NotFoundException">Thrown when user not found in DB.</exception>
+        public async Task<IEnumerable<BidDTO>> GetBidsByUserAsync(int userProfileId)
         {
-            var bids = await _unitOfWork.Bids.GetAllByUserAsync(userId);
+            if (await _unitOfWork.UserProfiles.GetAsync(userProfileId) == null)
+                throw new NotFoundException("User not found");
+            var bids = await _unitOfWork.Bids.GetAllByUserAsync(userProfileId);
             return bids.Select(x => Mapper.Map<Bid, BidDTO>(x));
         }
 
+        /// <summary>
+        /// Async method for getting bid by ID.
+        /// </summary>
+        /// <param name="bidId">The bid ID.</param>
+        /// <returns>The Task, containing bid DTO.</returns>
         public async Task<BidDTO> GetBidAsync(int bidId)
         {
             return Mapper.Map<Bid, BidDTO>(await _unitOfWork.Bids.GetAsync(bidId));

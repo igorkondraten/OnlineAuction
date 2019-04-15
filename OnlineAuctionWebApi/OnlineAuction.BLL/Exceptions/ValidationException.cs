@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace OnlineAuction.BLL.Exceptions
 {
+    /// <summary>
+    /// The exception is thrown when received data don't pass business logic validation.
+    /// </summary>
     public class ValidationException : Exception
     {
         public IEnumerable<string> ErrorsList { get; protected set; }

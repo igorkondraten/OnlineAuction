@@ -9,6 +9,9 @@ using OnlineAuction.BLL.Interfaces;
 
 namespace OnlineAuction.API.Controllers
 {
+    /// <summary>
+    /// Users controller.
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/users")]
     public class UsersController : ApiController
@@ -20,6 +23,11 @@ namespace OnlineAuction.API.Controllers
             _usersService = usersService;
         }
 
+        /// <summary>
+        /// Get all users with pagination.
+        /// </summary>
+        /// <param name="model">Pagination model.</param>
+        /// <returns>200 - at least 1 user found; 204 - no users found.</returns>
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IHttpActionResult> GetAllUsersAsync([FromUri] PagingModel model)
@@ -32,6 +40,11 @@ namespace OnlineAuction.API.Controllers
             return Ok(new { users, totalCount });
         }
 
+        /// <summary>
+        /// Get user by profile ID.
+        /// </summary>
+        /// <param name="profileId">User profile ID.</param>
+        /// <returns>200 - user found; 404 - user not found.</returns>
         [HttpGet]
         [Route("{profileId:int:min(1)}")]
         public async Task<IHttpActionResult> GetUserAsync(int profileId)
@@ -42,6 +55,10 @@ namespace OnlineAuction.API.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Get current user who is making request.
+        /// </summary>
+        /// <returns>200 - user found, 404 - user not found.</returns>
         [HttpGet]
         [Route("current")]
         public async Task<IHttpActionResult> GetCurrentUserAsync()
@@ -52,6 +69,11 @@ namespace OnlineAuction.API.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Register and create new user.
+        /// </summary>
+        /// <param name="model">Registration model.</param>
+        /// <returns>201 - user created, 400 - validation failed.</returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IHttpActionResult> RegisterUserAsync(RegisterModel model)
@@ -71,6 +93,12 @@ namespace OnlineAuction.API.Controllers
             return Created(Request.RequestUri + "/" + createdUser?.UserProfileId, createdUser);
         }
 
+        /// <summary>
+        /// Update user.
+        /// </summary>
+        /// <param name="profileId">User profile ID.</param>
+        /// <param name="user">User.</param>
+        /// <returns>200 - user updated, 403 - authorization failed, 404 - user not found; 400 - validation failed.</returns>
         [HttpPut]
         [Route("{profileId:int:min(1)}")]
         public async Task<IHttpActionResult> EditUserAsync(int profileId, UserDTO user)
@@ -78,6 +106,8 @@ namespace OnlineAuction.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var editedUser = await _usersService.GetUserByProfileAsync(profileId);
+            if (editedUser == null)
+                return NotFound();
             // Not admin user can edit only his own profile.
             if (!User.IsInRole("Admin"))
             {
@@ -91,6 +121,12 @@ namespace OnlineAuction.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Change user password.
+        /// </summary>
+        /// <param name="profileId">User profile ID.</param>
+        /// <param name="model">Update password model.</param>
+        /// <returns>200 - password changed, 400 - validation failed, 404 - user not found.</returns>
         [HttpPut]
         [Route("{profileId:int:min(1)}/password")]
         public async Task<IHttpActionResult> EditUserPasswordAsync(int profileId, UpdateUserPasswordModel model)
@@ -101,6 +137,11 @@ namespace OnlineAuction.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete user by profile ID.
+        /// </summary>
+        /// <param name="profileId">User profile ID.</param>
+        /// <returns>404 - user not found; 204 - user deleted.</returns>
         [HttpDelete]
         [Authorize(Roles = "Admin")]
         [Route("{profileId:int:min(1)}")]

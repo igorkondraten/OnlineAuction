@@ -4,6 +4,9 @@ using OnlineAuction.DAL.Entities;
 
 namespace OnlineAuction.BLL.Infrastructure.AutoMapper
 {
+    /// <summary>
+    /// Automapper profile for bid entity.
+    /// </summary>
     public class BidMapperProfile : Profile
     {
         public BidMapperProfile()

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OnlineAuction.API.Tests")]
+[assembly: AssemblyTitle("OnlineAuction.BLL.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OnlineAuction.API.Tests")]
+[assembly: AssemblyProduct("OnlineAuction.BLL.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b3a105b0-1787-46dc-9118-518cfc21b901")]
+[assembly: Guid("53a70fa1-8631-4f55-8f00-82f07eafd8f2")]
 
 // Version information for an assembly consists of the following four values:
 //

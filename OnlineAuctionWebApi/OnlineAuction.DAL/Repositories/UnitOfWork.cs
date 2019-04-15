@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using OnlineAuction.DAL.Interfaces;
@@ -10,6 +8,9 @@ using OnlineAuction.DAL.Interfaces.Repositories;
 
 namespace OnlineAuction.DAL.Repositories
 {
+    /// <summary>
+    /// Contains properties with repositories, grant access to repositories and can save changes in DB as a single transaction.
+    /// </summary>
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly IDataContext _context;
@@ -38,11 +39,18 @@ namespace OnlineAuction.DAL.Repositories
             _roleStore = roleStore;
         }
 
+        /// <summary>
+        /// Method for saving db changes.
+        /// </summary>
         public void Save()
         {
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Async method for saving db changes.
+        /// </summary>
+        /// <returns>The Task.</returns>
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();

@@ -12,7 +12,6 @@ namespace OnlineAuction.API.App_Start
     using System.Web;
     using System.Web.Http;
     using System.Web.Http.Dependencies;
-    using Microsoft.Owin.Security;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;

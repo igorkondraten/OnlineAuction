@@ -8,6 +8,9 @@ using OnlineAuction.BLL.Interfaces;
 
 namespace OnlineAuction.API.Controllers
 {
+    /// <summary>
+    /// Categories controller.
+    /// </summary>
     [RoutePrefix("api/categories")]
     [Authorize]
     public class CategoriesController : ApiController
@@ -19,6 +22,10 @@ namespace OnlineAuction.API.Controllers
             _categoriesService = categoriesService;
         }
 
+        /// <summary>
+        /// Get all categories.
+        /// </summary>
+        /// <returns>200 - at least 1 category found; 204 - no categories found.</returns>
         [AllowAnonymous]
         [Route("")]
         [HttpGet]
@@ -30,6 +37,11 @@ namespace OnlineAuction.API.Controllers
             return Ok(categories);
         }
 
+        /// <summary>
+        /// Get category by id.
+        /// </summary>
+        /// <param name="id">Category ID.</param>
+        /// <returns>200 - category found; 404 - category not found.</returns>
         [AllowAnonymous]
         [Route("{id:int:min(1)}")]
         [HttpGet]
@@ -41,39 +53,51 @@ namespace OnlineAuction.API.Controllers
             return Ok(category);
         }
 
+        /// <summary>
+        /// Create category.
+        /// </summary>
+        /// <param name="category">New category.</param>
+        /// <returns>400 - validation failed, 201 - category created.</returns>
         [Authorize(Roles = "Admin")]
         [Route("")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateCategoryAsync(CategoryDTO category)
         {
-            if (category == null)
-                return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            await _categoriesService.CreateCategoryAsync(category);
-            return Ok();
+            var createdCategory = await _categoriesService.CreateCategoryAsync(category);
+            return Created(Request.RequestUri + "/" + createdCategory?.CategoryId, createdCategory);
         }
 
+        /// <summary>
+        /// Edit category.
+        /// </summary>
+        /// <param name="id">Category ID.</param>
+        /// <param name="category">Category.</param>
+        /// <returns>400 - validation failed; 200 - category updated; 404 - category not found.</returns>
         [Authorize(Roles = "Admin")]
         [Route("{id:int:min(1)}")]
         [HttpPut]
         public async Task<IHttpActionResult> EditCategoryAsync(int id, CategoryDTO category)
         {
-            if (category == null)
-                return BadRequest();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             await _categoriesService.EditCategoryAsync(category);
             return Ok();
         }
 
+        /// <summary>
+        /// Delete category by ID.
+        /// </summary>
+        /// <param name="id">Category ID.</param>
+        /// <returns>404 - category not found; 204 - category deleted.</returns>
         [Authorize(Roles = "Admin")]
         [Route("{id:int:min(1)}")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteCategoryAsync(int id)
         {
             await _categoriesService.DeleteCategoryAsync(id);
-            return Ok();
+            return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
         }
     }
 }
